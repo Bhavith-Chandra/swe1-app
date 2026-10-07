@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.DS_Store
+staticfiles/
+
+# Deployment and local files
+swe1-app.zip
+db.sqlite3
