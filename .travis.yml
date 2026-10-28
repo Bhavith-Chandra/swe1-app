@@ -3,6 +3,12 @@ dist: jammy
 python:
   - "3.12"
 
+env:
+  global:
+    # travis-ci.com builds report to Coveralls as travis-pro with
+    # COVERALLS_REPO_TOKEN (set in Travis settings) so main gets a branch
+    - COVERALLS_SERVICE_NAME=travis-pro
+
 install:
   - pip install -r requirements.txt
   - pip install black flake8 coverage coveralls
