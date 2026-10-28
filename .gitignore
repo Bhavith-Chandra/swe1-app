@@ -9,3 +9,7 @@ staticfiles/
 # Deployment and local files
 swe1-app.zip
 db.sqlite3
+
+# Coverage
+.coverage
+htmlcov/
