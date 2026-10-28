@@ -1,5 +1,7 @@
 import datetime
+from io import StringIO
 
+from django.core.management import call_command
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -64,3 +66,15 @@ class PollsViewTests(TestCase):
         self.assertRedirects(response, reverse("polls:results", args=(question.id,)))
         choice.refresh_from_db()
         self.assertEqual(choice.votes, 1)
+
+
+class SeedPollsCommandTests(TestCase):
+    def test_seeds_empty_database(self):
+        call_command("seed_polls", stdout=StringIO())
+        self.assertEqual(Question.objects.count(), 3)
+        self.assertTrue(Choice.objects.exists())
+
+    def test_skips_when_polls_exist(self):
+        create_question("Existing", days=-1)
+        call_command("seed_polls", stdout=StringIO())
+        self.assertEqual(Question.objects.count(), 1)
