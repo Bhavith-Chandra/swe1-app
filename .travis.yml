@@ -15,12 +15,19 @@ script:
 after_success:
   - coveralls
 
+before_deploy:
+  - pip install awscli
+  - export AWS_DEFAULT_REGION=us-east-2
+  - export EB_APP=$(aws elasticbeanstalk describe-environments --environment-names swe1-app-env --query "Environments[0].ApplicationName" --output text)
+  - export EB_BUCKET=elasticbeanstalk-us-east-2-$(aws sts get-caller-identity --query Account --output text)
+  - echo "Deploying to app $EB_APP via bucket $EB_BUCKET"
+
 deploy:
   provider: elasticbeanstalk
   access_key_id: $AWS_ACCESS_KEY_ID
   secret_access_key: $AWS_SECRET_ACCESS_KEY
   region: us-east-2
-  app: swe1-app
+  app: $EB_APP
   env: swe1-app-env
   bucket: $EB_BUCKET
   on:
